@@ -5,9 +5,10 @@ import os
 from requests.exceptions import HTTPError
 
 from utils.notif import notify
+from utils.time import current_time
 
 
-notify("Kyber Trending", "Started running")
+notify("Kyber Trending", "Started running at " + current_time())
 
 
 OLD_SYMBOLS = [
@@ -23,6 +24,7 @@ UA_HEADER = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) Appl
 
 
 while True:
+    print("Current Time =", current_time())
     try:
         response = requests.get(KYBER_TRENDING_URL, headers=UA_HEADER)
     except HTTPError as e:
