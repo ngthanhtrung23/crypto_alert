@@ -55,7 +55,7 @@ while True:
             if symbol not in OLD_SYMBOLS:
                 print(symbol)
                 new_symbols.append(symbol)
-        symbols = OLD_SYMBOLS
+        OLD_SYMBOLS = symbols
         notify("Kyber Trending", "Found new coins: " + ' '.join([str(symbol) for symbol in new_symbols]))
 
     time.sleep(10 * 60)
