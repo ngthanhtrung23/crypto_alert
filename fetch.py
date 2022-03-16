@@ -5,7 +5,7 @@ import os
 from requests.exceptions import HTTPError
 
 from utils.notif import notify
-from utils.time import current_time
+from utils.time import current_time, timestamp_to_str
 
 
 notify("Kyber Trending", "Started running at " + current_time())
@@ -46,6 +46,8 @@ while True:
     tokens = data['data']['tokens']
     symbols = [token['symbol'] for token in tokens]
 
+    token_map = {token['symbol'] : token for token in tokens}
+
     if symbols == OLD_SYMBOLS:
         print('Fetched => Same')
     else:
@@ -53,7 +55,7 @@ while True:
         new_symbols = []
         for symbol in symbols:
             if symbol not in OLD_SYMBOLS:
-                print(symbol)
+                print("{:9}".format(symbol), '({})'.format(timestamp_to_str(int(token_map[symbol]['discovered_on']))))
                 new_symbols.append(symbol)
         OLD_SYMBOLS = symbols
         notify("Kyber Trending", "Found new coins: " + ' '.join([str(symbol) for symbol in new_symbols]))
