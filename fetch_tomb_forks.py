@@ -11,7 +11,7 @@ from utils.time import current_time, timestamp_to_str
 notify("pFTM price watch", "Started running at " + current_time())
 
 
-COINGECKO_PRICE_URL = 'https://api.coingecko.com/api/v3/simple/price/?ids=pftm,fantom&vs_currencies=USD'
+COINGECKO_PRICE_URL = 'https://api.coingecko.com/api/v3/simple/price/?ids=pftm,fantom,tomb&vs_currencies=USD'
 UA_HEADER = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
 
@@ -37,11 +37,20 @@ while True:
     data = json.loads(response.content)
     pftm_price = data['pftm']['usd']
     ftm_price = data['fantom']['usd']
+    tomb_price = data['tomb']['usd']
 
-    rate = pftm_price / ftm_price
-    print('rate =', rate)
+    # Alert pFTM rate
+    pftm_rate = pftm_price / ftm_price
+    print('pftm_rate =', pftm_rate)
 
-    if rate < 0.97:
-        notify("pFTM rate", "{} / {} = {}".format(pftm_price, ftm_price, rate))
+    if pftm_rate < 0.98:
+        notify("pFTM rate", "{} / {} = {}".format(pftm_price, ftm_price, pftm_rate))
 
-    time.sleep(10 * 60)
+    # Alert TOMB rate
+    tomb_rate = tomb_price / ftm_price
+    print('tomb_rate = ', tomb_rate)
+
+    if tomb_rate > 1.01:
+        notify("TOMB rate", "{} / {} = {}".format(tomb_price, ftm_price, tomb_rate))
+
+    time.sleep(2 * 60)
