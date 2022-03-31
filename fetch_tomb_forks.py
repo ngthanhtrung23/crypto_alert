@@ -16,7 +16,6 @@ UA_HEADER = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) Appl
 
 
 while True:
-    print("Current Time =", current_time())
     try:
         response = requests.get(COINGECKO_PRICE_URL, headers=UA_HEADER)
     except HTTPError as e:
@@ -39,18 +38,16 @@ while True:
     ftm_price = data['fantom']['usd']
     tomb_price = data['tomb']['usd']
 
-    # Alert pFTM rate
     pftm_rate = pftm_price / ftm_price
-    print('pftm_rate =', pftm_rate)
+    tomb_rate = tomb_price / ftm_price
+    print('{}: pftm = {:.4f}, tomb = {:.4f}'.format(current_time(), pftm_rate, tomb_rate))
 
-    if pftm_rate < 0.98:
-        notify("pFTM rate", "{} / {} = {}".format(pftm_price, ftm_price, pftm_rate))
+    # Alert pFTM rate
+    if pftm_rate < 0.96:
+        notify("pFTM rate", "{} / {} = {:.4f}".format(pftm_price, ftm_price, pftm_rate))
 
     # Alert TOMB rate
-    tomb_rate = tomb_price / ftm_price
-    print('tomb_rate = ', tomb_rate)
-
-    if tomb_rate > 1.01:
-        notify("TOMB rate", "{} / {} = {}".format(tomb_price, ftm_price, tomb_rate))
+    if tomb_rate < 0.98:
+        notify("TOMB rate", "{} / {} = {:.4f}".format(tomb_price, ftm_price, tomb_rate))
 
     time.sleep(2 * 60)
